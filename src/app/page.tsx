@@ -70,7 +70,9 @@ const PinIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const PixelMap = ({ t }: { t: (typeof copy)["en"] }) => {
+type LocaleCopy = (typeof copy)[keyof typeof copy];
+
+const PixelMap = ({ t }: { t: LocaleCopy }) => {
   return (
     <div className="map-wrapper-pixel">
       <div
@@ -205,6 +207,7 @@ export default function Home() {
     topic: "",
     details: "",
   });
+  const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
 
   const t = copy[lang];
@@ -218,7 +221,7 @@ export default function Home() {
     }, 800);
   };
   return (
-    <div className="relative min-h-screen bg-slate-50 text-slate-900">
+    <div className="relative min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
           <div className="flex flex-col items-center gap-4">
@@ -243,20 +246,20 @@ export default function Home() {
 
       <div className="mx-auto flex max-w-6xl flex-col gap-16 px-6 py-12 md:py-14">
         <header className="border-b border-slate-200 pb-6">
-          <div className="flex items-center gap-4">
-            <div className="flex flex-1 items-center">
-        <Image
+          <div className="flex flex-col items-center gap-3 md:grid md:grid-cols-[auto,1fr,auto] md:items-center md:gap-6">
+            <div className="flex items-center justify-center">
+              <Image
                 src="/logo.svg"
                 alt="REVVEKA Group"
                 width={128}
                 height={128}
-                className="h-28 w-28 object-contain"
-          priority
-        />
+                className="h-20 w-20 object-contain md:h-24 md:w-24"
+                priority
+              />
             </div>
 
-            <div className="flex-none text-center">
-              <div className="text-[28px] font-semibold leading-tight tracking-[0.16em] text-slate-900 md:text-[30px]">
+            <div className="flex flex-col items-center text-center md:justify-self-center">
+              <div className="text-[26px] font-semibold leading-tight tracking-[0.12em] text-slate-900 md:text-[30px]">
                 REVVEKA GROUP
               </div>
               <p className="text-base font-medium text-slate-700 md:text-lg">
@@ -264,26 +267,26 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="flex flex-1 scale-[0.94] flex-wrap items-center justify-end gap-3 text-[11px] uppercase md:scale-[0.94]">
-            <div className="flex items-center gap-2">
-              {languageMarks.map((langOpt) => {
-                const active = lang === langOpt;
-                return (
-                  <button
-                    key={langOpt}
-                    type="button"
-                    onClick={() => handleLang(langOpt)}
-                    className={`cursor-pointer rounded-full border px-3 py-1 font-semibold shadow-[2px_2px_0_rgba(15,23,42,0.12)] text-[11px] transition-transform transition-shadow duration-150 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_rgba(15,23,42,0.18)] focus:outline-none ${
-                      active
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-slate-200 bg-white text-slate-800"
-                    }`}
-                  >
-                    {langOpt.toUpperCase()}
-                  </button>
-                );
-              })}
-            </div>
+            <div className="flex flex-1 scale-[0.94] flex-wrap items-center justify-center gap-3 text-[11px] uppercase md:scale-[0.94] md:justify-end">
+              <div className="flex items-center gap-2">
+                {languageMarks.map((langOpt) => {
+                  const active = lang === langOpt;
+                  return (
+                    <button
+                      key={langOpt}
+                      type="button"
+                      onClick={() => handleLang(langOpt)}
+                      className={`cursor-pointer rounded-full border px-3 py-1 font-semibold shadow-[2px_2px_0_rgba(15,23,42,0.12)] text-[11px] transition-transform transition-shadow duration-150 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_rgba(15,23,42,0.18)] focus:outline-none ${
+                        active
+                          ? "border-slate-900 bg-slate-900 text-white"
+                          : "border-slate-200 bg-white text-slate-800"
+                      }`}
+                    >
+                      {langOpt.toUpperCase()}
+                    </button>
+                  );
+                })}
+              </div>
               <a
                 href="#inquiry"
                 className="rounded-full border-2 border-slate-900 bg-white px-4 py-2 text-[11px] font-semibold tracking-[0.08em] shadow-[4px_4px_0_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0_rgba(15,23,42,0.2)]"
@@ -440,13 +443,18 @@ export default function Home() {
               className="grid w-full max-w-md gap-3"
               onSubmit={async (e) => {
                 e.preventDefault();
+                setSent(false);
                 setSending(true);
                 try {
-                  await fetch("/api/inquiry", {
+                  const res = await fetch("/api/inquiry", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ ...form, lang }),
                   });
+                  if (res.ok) {
+                    setForm({ contact: "", topic: "", details: "" });
+                    setSent(true);
+                  }
                 } catch (error) {
                   console.error("Failed to send inquiry", error);
                 } finally {
@@ -492,6 +500,13 @@ export default function Home() {
               >
                 {sending ? (lang === "en" ? "Sending..." : "Отправка...") : t.formCta}
               </button>
+              {sent && (
+                <p className="text-sm font-semibold text-green-700">
+                  {lang === "en"
+                    ? "Request sent. We will contact you shortly."
+                    : "Запрос отправлен. Мы свяжемся с вами в ближайшее время."}
+                </p>
+              )}
             </form>
           </div>
         </section>

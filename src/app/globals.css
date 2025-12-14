@@ -76,6 +76,7 @@ a {
 /* Pixel map styles */
 .map-wrapper-pixel {
   position: relative;
+  max-width: 100%;
   border-radius: 18px;
   border: none;
   background: transparent;
@@ -253,7 +254,7 @@ a {
 }
 .city--guangzhou {
   left: 80%;
-  top: 79%;
+  top: 70%;
 }
 
 @media (max-width: 720px) {
