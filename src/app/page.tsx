@@ -70,7 +70,9 @@ const PinIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const PixelMap = ({ t }: { t: (typeof copy)["en"] }) => {
+type LocaleCopy = (typeof copy)[keyof typeof copy];
+
+const PixelMap = ({ t }: { t: LocaleCopy }) => {
   return (
     <div className="map-wrapper-pixel">
       <div
