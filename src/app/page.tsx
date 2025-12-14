@@ -200,6 +200,12 @@ const copy = {
 export default function Home() {
   const [lang, setLang] = useState<"en" | "ru">("en");
   const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState({
+    contact: "",
+    topic: "",
+    details: "",
+  });
+  const [sending, setSending] = useState(false);
 
   const t = copy[lang];
 
@@ -432,9 +438,21 @@ export default function Home() {
             </div>
             <form
               className="grid w-full max-w-md gap-3"
-              action="mailto:contact@revveka.com"
-              method="post"
-              encType="text/plain"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setSending(true);
+                try {
+                  await fetch("/api/inquiry", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ ...form, lang }),
+                  });
+                } catch (error) {
+                  console.error("Failed to send inquiry", error);
+                } finally {
+                  setSending(false);
+                }
+              }}
             >
               <input
                 type="text"
@@ -442,24 +460,37 @@ export default function Home() {
                 placeholder={t.formContact}
                 className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm shadow-[3px_3px_0_rgba(15,23,42,0.08)] focus:border-slate-800 focus:outline-none"
                 required
+                value={form.contact}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, contact: e.target.value }))
+                }
               />
               <input
                 type="text"
                 name="topic"
                 placeholder={t.formTopic}
                 className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm shadow-[3px_3px_0_rgba(15,23,42,0.08)] focus:border-slate-800 focus:outline-none"
+                value={form.topic}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, topic: e.target.value }))
+                }
               />
               <textarea
                 name="details"
                 placeholder={t.formDetails}
                 rows={3}
                 className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm shadow-[3px_3px_0_rgba(15,23,42,0.08)] focus:border-slate-800 focus:outline-none"
+                value={form.details}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, details: e.target.value }))
+                }
               />
               <button
                 type="submit"
-                className="mt-1 inline-flex items-center justify-center rounded-full border-2 border-slate-900 bg-slate-900 px-5 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[6px_6px_0_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:shadow-[8px_8px_0_rgba(15,23,42,0.2)]"
+                className="mt-1 inline-flex items-center justify-center rounded-full border-2 border-slate-900 bg-slate-900 px-5 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[6px_6px_0_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:shadow-[8px_8px_0_rgba(15,23,42,0.2)] disabled:opacity-60"
+                disabled={sending}
               >
-                {t.formCta}
+                {sending ? (lang === "en" ? "Sending..." : "Отправка...") : t.formCta}
               </button>
             </form>
           </div>
