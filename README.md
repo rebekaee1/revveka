@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## REVVEKA Site (Next.js / React / Tailwind)
 
-## Getting Started
+### Требования
+- Node.js 18+ (рекомендуется LTS)
+- npm (поставляется с Node)
 
-First, run the development server:
-
+### Установка
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Режим разработки
+```bash
+npm run dev
+```
+Приложение откроется на http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Сборка и запуск (production)
+```bash
+npm run build
+# PORT можно задать через переменную окружения, по умолчанию 3000
+PORT=3000 npm run start
+```
+`next start` автоматически читает `process.env.PORT`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Линт
+```bash
+npm run lint
+```
 
-## Learn More
+### Скрипты (package.json)
+- `dev` — локальная разработка
+- `build` — production-сборка
+- `start` — запуск собранного приложения (`next start`)
+- `lint` — ESLint
 
-To learn more about Next.js, take a look at the following resources:
+### Деплой
+- В `next.config.ts` задано `output: "standalone"`, чтобы собрать минимальный набор для запуска (`.next/standalone`).
+- Для сервера достаточно: `npm install`, `npm run build`, затем `PORT=<port> npm run start`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Полезное
+- Игнорируемые файлы перечислены в `.gitignore` (node_modules, .next, env и т.д.).

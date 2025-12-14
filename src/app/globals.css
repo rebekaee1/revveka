@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f6f7fb;
+  --foreground: #0f172a;
+  --accent: #1f2f49;
 }
 
 @theme inline {
@@ -14,13 +15,269 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0f1c;
+    --foreground: #e5e7eb;
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(191, 219, 254, 0.35), transparent 32%),
+    radial-gradient(circle at 80% 0%, rgba(165, 180, 252, 0.28), transparent 30%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.04), transparent 38%),
+    var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), "Inter", system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: #dbeafe;
+  color: #0f172a;
+}
+
+.partners-marquee {
+  display: flex;
+  width: max-content;
+  gap: 12px;
+  animation: partners-marquee 20s linear infinite;
+}
+
+@keyframes partners-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.land-1 {
+  background: #cde4cf;
+}
+.land-2 {
+  background: #d7ecd9;
+}
+.land-3 {
+  background: #c0dcc3;
+}
+
+/* Pixel map styles */
+.map-wrapper-pixel {
+  position: relative;
+  border-radius: 18px;
+  border: none;
+  background: transparent;
+  overflow: hidden;
+  padding: 0;
+}
+
+.pixel-map-static {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 1;
+  border-radius: 18px;
+  background: url("/map.svg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  image-rendering: pixelated;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.12);
+}
+
+.map-ribbon {
+  position: absolute;
+  border-radius: 12px;
+  filter: drop-shadow(2px 2px 0 rgba(15, 23, 42, 0.12));
+}
+
+.ribbon-green {
+  background: rgba(148, 201, 143, 0.7);
+}
+
+.ribbon-blue {
+  background: rgba(156, 195, 230, 0.5);
+}
+
+.pixel {
+  width: 100%;
+  height: 100%;
+}
+
+.pixel.sky {
+  background: linear-gradient(to bottom, #dbeafe, #bcd7ff);
+}
+
+.pixel.sky.cloud {
+  background: #f4f7ff;
+}
+
+.pixel.water {
+  background: linear-gradient(to bottom, #4b8fff, #3474ea);
+}
+
+.pixel.water.water-deep {
+  background: linear-gradient(to bottom, #3474ea, #1e4fcb);
+}
+
+.pixel.water.water-coast {
+  background: linear-gradient(to bottom, #4b8fff, #3474ea);
+}
+
+.pixel.water.lake {
+  background: #3a7fe4;
+}
+
+.pixel.plains {
+  background: #dde9a6;
+}
+.pixel.plains.plains-humid {
+  background: #d0e29a;
+}
+.pixel.steppe {
+  background: #d7d88f;
+}
+.pixel.forest {
+  background: linear-gradient(to bottom, #8ecb71, #6fa55f);
+}
+.pixel.forest.forest-wet {
+  background: #6fa55f;
+}
+.pixel.desert {
+  background: #f2c488;
+}
+.pixel.semi-desert {
+  background: #e8c07e;
+}
+.pixel.plateau {
+  background: #d6b48b;
+}
+.pixel.plateau.plateau-dry {
+  background: #c59d75;
+}
+.pixel.mountain {
+  background: #bea28b;
+}
+.pixel.mountain-snow {
+  background: #f7f7f7;
+}
+
+.city {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(15, 23, 42, 0.96);
+  border-radius: 999px;
+  border: 2px solid #e5e7eb;
+  box-shadow: 2px 2px 0 #020617;
+  font-size: 12px;
+  color: #e5e7eb;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.city::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -7px;
+  width: 8px;
+  height: 8px;
+  background: #e5e7eb;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
+.city-pin {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #020617;
+  font-size: 9px;
+  font-weight: 700;
+  box-shadow: 1px 1px 0 #020617;
+}
+
+.city-main {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.city-sub {
+  font-size: 10px;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.city-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.city--geneva {
+  left: 0%;
+  top: 40%;
+}
+.city--moscow {
+  left: 15%;
+  top: 0%;
+}
+.city--sochi {
+  left: 21%;
+  top: 63%;
+}
+.city--beijing {
+  left: 60%;
+  top: 55%;
+}
+.city--guangzhou {
+  left: 80%;
+  top: 79%;
+}
+
+@media (max-width: 720px) {
+  .map-wrapper-pixel {
+    padding: 10px;
+  }
+  .pixel-map-static {
+    aspect-ratio: 2.9 / 1;
+    background-size: cover;
+  }
+  .city {
+    transform: scale(0.85);
+    transform-origin: center;
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+  .city-pin {
+    width: 12px;
+    height: 12px;
+    font-size: 8px;
+  }
+  .city {
+  }
+  .city::after {
+    bottom: -6px;
+  }
 }
