@@ -11,3 +11,6 @@ export function getLocaleFromPath(pathname: string): Locale {
   return isValidLocale(segment) ? segment : defaultLocale;
 }
 
+
+
+

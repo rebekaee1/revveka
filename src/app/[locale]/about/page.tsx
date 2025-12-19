@@ -121,3 +121,6 @@ export function generateStaticParams() {
   return [{ locale: 'ru' }, { locale: 'en' }];
 }
 
+
+
+

@@ -26,7 +26,13 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   openGraph: {
     type: 'website',
