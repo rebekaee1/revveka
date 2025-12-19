@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://revveka.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://revveka-group.ru'),
   title: {
     default: 'REVVEKA Group — Escrow, Audit & Due Diligence',
     template: '%s — REVVEKA Group',

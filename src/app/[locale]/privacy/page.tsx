@@ -44,7 +44,7 @@ export default async function PrivacyPage({ params }: PageProps) {
                 <p>
                   Настоящая Политика конфиденциальности описывает, как REVVEKA Group GmbH 
                   (&quot;Компания&quot;, &quot;мы&quot;) собирает, использует и защищает персональные данные 
-                  пользователей сайта revveka.com (&quot;Сайт&quot;).
+                  пользователей сайта revveka-group.ru (&quot;Сайт&quot;).
                 </p>
                 <p>
                   Используя наш Сайт, вы соглашаетесь с условиями данной Политики.
@@ -115,7 +115,7 @@ export default async function PrivacyPage({ params }: PageProps) {
                 <p>
                   This Privacy Policy describes how REVVEKA Group GmbH 
                   (&quot;Company&quot;, &quot;we&quot;) collects, uses and protects personal data 
-                  of users of the revveka.com website (&quot;Website&quot;).
+                  of users of the revveka-group.ru website (&quot;Website&quot;).
                 </p>
                 <p>
                   By using our Website, you agree to the terms of this Policy.

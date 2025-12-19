@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dictionary = getDictionary(validLocale as Locale);
   const t = dictionary.meta;
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://revveka.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://revveka-group.ru';
 
   return {
     title: t.title,
@@ -74,8 +74,8 @@ export default async function HomePage({ params }: PageProps) {
             '@type': 'Organization',
             name: 'REVVEKA Group',
             legalName: 'REVVEKA Group GmbH',
-            url: 'https://revveka.com',
-            logo: 'https://revveka.com/logo.svg',
+            url: 'https://revveka-group.ru',
+            logo: 'https://revveka-group.ru/logo.svg',
             description: dictionary.meta.description,
             foundingDate: '2014',
             address: {

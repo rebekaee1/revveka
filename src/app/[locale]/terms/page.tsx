@@ -43,7 +43,7 @@ export default async function TermsPage({ params }: PageProps) {
                 <h2>1. Общие положения</h2>
                 <p>
                   Настоящие Условия использования (&quot;Условия&quot;) регулируют использование 
-                  веб-сайта revveka.com (&quot;Сайт&quot;), принадлежащего REVVEKA Group GmbH 
+                  веб-сайта revveka-group.ru (&quot;Сайт&quot;), принадлежащего REVVEKA Group GmbH 
                   (&quot;Компания&quot;).
                 </p>
                 <p>
@@ -116,7 +116,7 @@ export default async function TermsPage({ params }: PageProps) {
               <>
                 <h2>1. General Provisions</h2>
                 <p>
-                  These Terms of Use (&quot;Terms&quot;) govern the use of the revveka.com 
+                  These Terms of Use (&quot;Terms&quot;) govern the use of the revveka-group.ru 
                   website (&quot;Website&quot;) owned by REVVEKA Group GmbH (&quot;Company&quot;).
                 </p>
                 <p>
