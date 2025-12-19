@@ -66,15 +66,25 @@ export function Header({ dictionary, locale }: HeaderProps) {
             className="flex items-center gap-3 shrink-0"
             aria-label="REVVEKA Group - На главную"
           >
+            {/* Mobile: PNG without background */}
             <Image
-              src="/logo.png"
+              src="/logo_wobackground.png"
               alt="REVVEKA Group"
-              width={144}
-              height={144}
-              sizes="(max-width: 640px) 40px, 48px"
-              className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+              width={120}
+              height={110}
+              sizes="40px"
+              className="sm:hidden h-10 w-10 object-contain"
               priority
               quality={100}
+            />
+            {/* Desktop: SVG */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.svg"
+              alt="REVVEKA Group"
+              width={48}
+              height={48}
+              className="hidden sm:block h-12 w-12 object-contain"
             />
             <div className="hidden sm:block">
               <div className="text-lg font-semibold tracking-wide text-slate-900">

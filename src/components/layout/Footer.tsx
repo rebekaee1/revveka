@@ -26,14 +26,24 @@ export function Footer({ dictionary, locale }: FooterProps) {
           {/* Company Info */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href={`/${locale}`} className="inline-flex items-center gap-3">
+              {/* Mobile: PNG without background */}
               <Image
-                src="/logo.png"
+                src="/logo_wobackground.png"
                 alt="REVVEKA Group"
                 width={120}
-                height={120}
+                height={110}
                 sizes="40px"
-                className="h-10 w-10 object-contain brightness-0 invert"
+                className="sm:hidden h-10 w-10 object-contain brightness-0 invert"
                 quality={100}
+              />
+              {/* Desktop: SVG */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.svg"
+                alt="REVVEKA Group"
+                width={40}
+                height={40}
+                className="hidden sm:block h-10 w-10 object-contain brightness-0 invert"
               />
               <span className="text-lg font-semibold tracking-wide">
                 REVVEKA GROUP
