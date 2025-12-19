@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Container } from '@/components/ui/Container';
 import type { Dictionary } from '@/data/dictionaries';
 import type { Locale } from '@/lib/i18n';
@@ -25,13 +26,14 @@ export function Footer({ dictionary, locale }: FooterProps) {
           {/* Company Info */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href={`/${locale}`} className="inline-flex items-center gap-3">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo.svg"
+              <Image
+                src="/logo.png"
                 alt="REVVEKA Group"
-                width={40}
-                height={40}
+                width={120}
+                height={120}
+                sizes="40px"
                 className="h-10 w-10 object-contain brightness-0 invert"
+                quality={100}
               />
               <span className="text-lg font-semibold tracking-wide">
                 REVVEKA GROUP

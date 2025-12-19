@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -65,13 +66,15 @@ export function Header({ dictionary, locale }: HeaderProps) {
             className="flex items-center gap-3 shrink-0"
             aria-label="REVVEKA Group - На главную"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo.svg"
+            <Image
+              src="/logo.png"
               alt="REVVEKA Group"
-              width={48}
-              height={48}
+              width={144}
+              height={144}
+              sizes="(max-width: 640px) 40px, 48px"
               className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+              priority
+              quality={100}
             />
             <div className="hidden sm:block">
               <div className="text-lg font-semibold tracking-wide text-slate-900">
