@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import type { Dictionary } from '@/data/dictionaries';
@@ -9,29 +9,36 @@ interface FiguresProps {
   dictionary: Dictionary;
 }
 
-// Animated counter component
+// Animated counter component - simplified without early return setState
 function AnimatedNumber({ value, duration = 2000 }: { value: string; duration?: number }) {
-  const [displayValue, setDisplayValue] = useState('0');
-  
-  const updateDisplay = useCallback((newValue: string) => {
-    setDisplayValue(newValue);
-  }, []);
-  
-  useEffect(() => {
-    // Check if value starts with > or has letters
+  // Parse value once
+  const parsed = useMemo(() => {
     const hasPrefix = value.startsWith('>');
     const prefix = hasPrefix ? '>' : '';
     const cleanValue = value.replace('>', '').replace(/[^0-9.]/g, '');
     const suffix = value.replace(/[0-9.>]/g, '');
     const numericValue = parseFloat(cleanValue);
+    const isNumeric = !isNaN(numericValue);
+    const isInteger = isNumeric && Number.isInteger(numericValue);
     
-    if (isNaN(numericValue)) {
-      updateDisplay(value);
+    return { prefix, suffix, numericValue, isNumeric, isInteger };
+  }, [value]);
+  
+  // Initialize state with the actual value if non-numeric
+  const [displayValue, setDisplayValue] = useState(() => 
+    parsed.isNumeric ? '0' : value
+  );
+  
+  const animationRef = useRef<number | null>(null);
+  
+  useEffect(() => {
+    // Skip animation for non-numeric values
+    if (!parsed.isNumeric) {
       return;
     }
     
+    const { prefix, suffix, numericValue, isInteger } = parsed;
     const startTime = Date.now();
-    let animationId: number;
     
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -41,54 +48,73 @@ function AnimatedNumber({ value, duration = 2000 }: { value: string; duration?: 
       const easeOut = 1 - Math.pow(1 - progress, 3);
       const current = numericValue * easeOut;
       
-      if (Number.isInteger(numericValue)) {
-        updateDisplay(`${prefix}${Math.floor(current)}${suffix}`);
-      } else {
-        updateDisplay(`${prefix}${current.toFixed(1)}${suffix}`);
-      }
+      const formatted = isInteger 
+        ? `${prefix}${Math.floor(current)}${suffix}`
+        : `${prefix}${current.toFixed(1)}${suffix}`;
+      
+      setDisplayValue(formatted);
       
       if (progress < 1) {
-        animationId = requestAnimationFrame(animate);
+        animationRef.current = requestAnimationFrame(animate);
       } else {
-        updateDisplay(value);
+        setDisplayValue(value);
       }
     };
     
     const timer = setTimeout(() => {
-      animationId = requestAnimationFrame(animate);
+      animationRef.current = requestAnimationFrame(animate);
     }, 300);
     
     return () => {
       clearTimeout(timer);
-      if (animationId) {
-        cancelAnimationFrame(animationId);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [value, duration, updateDisplay]);
+  }, [value, duration, parsed]);
   
   return <>{displayValue}</>;
+}
+
+// Helper to calculate segments without mutation
+function calculateSegments(owners: Array<{ name: string; role: string; percentage: number }>) {
+  const result: Array<{
+    name: string;
+    role: string;
+    percentage: number;
+    startAngle: number;
+    endAngle: number;
+    color: string;
+  }> = [];
+  
+  let cumulative = 0;
+  
+  for (let i = 0; i < owners.length; i++) {
+    const owner = owners[i];
+    const startAngle = (cumulative / 100) * 360;
+    cumulative += owner.percentage;
+    const endAngle = (cumulative / 100) * 360;
+    
+    result.push({
+      ...owner,
+      startAngle,
+      endAngle,
+      color: i === 0 ? '#1e40af' : i === 1 ? '#3b82f6' : '#93c5fd',
+    });
+  }
+  
+  return result;
 }
 
 export function Figures({ dictionary }: FiguresProps) {
   const t = dictionary.figures;
   const ownership = dictionary.ownership;
 
-  // Calculate donut chart segments using useMemo
-  const segments = useMemo(() => {
-    const owners = ownership.owners;
-    let cumulative = 0;
-    return owners.map((owner, index) => {
-      const startAngle = (cumulative / 100) * 360;
-      cumulative += owner.percentage;
-      const endAngle = (cumulative / 100) * 360;
-      return {
-        ...owner,
-        startAngle,
-        endAngle,
-        color: index === 0 ? '#1e40af' : index === 1 ? '#3b82f6' : '#93c5fd',
-      };
-    });
-  }, [ownership.owners]);
+  // Calculate donut chart segments using useMemo with helper function
+  const segments = useMemo(
+    () => calculateSegments(ownership.owners),
+    [ownership.owners]
+  );
 
   // Create SVG arc path
   const createArc = (startAngle: number, endAngle: number, radius: number, innerRadius: number) => {
