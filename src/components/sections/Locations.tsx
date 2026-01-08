@@ -172,10 +172,10 @@ export function Locations({ dictionary }: LocationsProps) {
           animation: carousel 22s linear infinite;
         }
         
-        /* Ускоренная карусель на мобильных (30% быстрее) */
+        /* Ускоренная карусель на мобильных (10% быстрее) */
         @media (max-width: 768px) {
           .animate-carousel {
-            animation: carousel 15s linear infinite;
+            animation: carousel 20s linear infinite;
           }
         }
         
