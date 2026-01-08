@@ -157,8 +157,8 @@ export const dictionaries = {
       title: 'Структура владения',
       subtitle: 'Прозрачная структура собственности компании',
       owners: [
-        { name: 'Tim Revveka', role: 'Основатель', percentage: 10 },
-        { name: 'Sofia Rebeka', role: 'Партнёр', percentage: 45 },
+        { name: 'Marina Konkova', role: 'Основатель', percentage: 10 },
+        { name: 'Sofya Rebeka', role: 'Партнёр', percentage: 45 },
         { name: 'Evgenii Rebeka', role: 'Партнёр', percentage: 45 },
       ],
     },
@@ -445,8 +445,8 @@ export const dictionaries = {
       title: 'Ownership Structure',
       subtitle: 'Transparent company ownership structure',
       owners: [
-        { name: 'Tim Revveka', role: 'Founder', percentage: 10 },
-        { name: 'Sofia Rebeka', role: 'Partner', percentage: 45 },
+        { name: 'Marina Konkova', role: 'Founder', percentage: 10 },
+        { name: 'Sofya Rebeka', role: 'Partner', percentage: 45 },
         { name: 'Evgenii Rebeka', role: 'Partner', percentage: 45 },
       ],
     },

@@ -1,3 +1,5 @@
+'use client';
+
 import { Container } from '@/components/ui/Container';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import type { Dictionary } from '@/data/dictionaries';
@@ -39,6 +41,9 @@ export function Locations({ dictionary }: LocationsProps) {
     return locationIcons.asia;
   };
 
+  // Дублируем карточки для бесконечной анимации
+  const duplicatedOffices = [...t.offices, ...t.offices, ...t.offices];
+
   return (
     <section id="locations" className="py-16 sm:py-24 bg-slate-50 relative overflow-hidden">
       {/* Decorative elements */}
@@ -51,27 +56,39 @@ export function Locations({ dictionary }: LocationsProps) {
           title={t.title}
           subtitle={t.subtitle}
         />
+      </Container>
 
-        <div className="mt-12">
-          {/* Desktop: Grid layout */}
-          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {t.offices.map((office, index) => (
+      {/* Animated carousel - full width */}
+      <div className="mt-12 relative">
+        {/* Gradient overlays for smooth edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-40 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-40 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
+        
+        {/* Carousel track */}
+        <div 
+          className="flex gap-6 animate-carousel hover:pause-animation"
+          style={{
+            width: 'max-content',
+          }}
+        >
+          {duplicatedOffices.map((office, index) => {
+            const originalIndex = index % t.offices.length;
+            return (
               <article
-                key={office.city}
+                key={`${office.city}-${index}`}
                 className={`
-                  relative bg-white rounded-2xl border p-6 transition-all duration-300
-                  hover:shadow-xl hover:-translate-y-2 group
+                  shrink-0 w-[300px] sm:w-[340px] bg-white rounded-2xl border p-6 transition-all duration-500
+                  hover:shadow-2xl hover:-translate-y-3 hover:scale-105 group cursor-pointer
                   ${office.isHQ 
-                    ? 'border-blue-200 ring-1 ring-blue-100 lg:col-span-1 hover:shadow-blue-100/50' 
-                    : 'border-slate-200 hover:border-blue-200 hover:shadow-blue-50/50'
+                    ? 'border-blue-200 ring-1 ring-blue-100 hover:shadow-blue-200/50' 
+                    : 'border-slate-200 hover:border-blue-300 hover:shadow-blue-100/50'
                   }
                 `}
-                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {office.isHQ && (
                   <div className="absolute -top-3 left-6">
-                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-700 text-white text-xs font-semibold rounded-full shadow-lg shadow-blue-500/30">
-                      <svg className="w-3 h-3 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-700 text-white text-xs font-semibold rounded-full shadow-lg shadow-blue-500/30 animate-pulse">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" clipRule="evenodd" />
                       </svg>
                       HQ
@@ -81,88 +98,90 @@ export function Locations({ dictionary }: LocationsProps) {
 
                 <div className="flex items-start gap-4">
                   <div className={`
-                    shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300
-                    group-hover:scale-110 group-hover:rotate-3
+                    shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-500
+                    group-hover:scale-125 group-hover:rotate-6
                     ${office.isHQ 
-                      ? 'bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white' 
-                      : 'bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-600'
+                      ? 'bg-gradient-to-br from-blue-100 to-blue-200 text-blue-700 group-hover:from-blue-600 group-hover:to-blue-700 group-hover:text-white shadow-lg shadow-blue-200/50' 
+                      : 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-600 group-hover:from-blue-100 group-hover:to-blue-200 group-hover:text-blue-600 shadow-md shadow-slate-200/50'
                     }
                   `}>
-                    {getIcon(index, office.isHQ)}
+                    {getIcon(originalIndex, office.isHQ)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-900 transition-colors">
+                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-900 transition-colors duration-300">
                       {office.city}
                     </h3>
-                    <p className="text-sm text-slate-500">{office.country}</p>
+                    <p className="text-sm text-slate-500 group-hover:text-blue-500 transition-colors duration-300">{office.country}</p>
                   </div>
                 </div>
 
-                <div className="mt-4">
-                  <span className="inline-block px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded-md group-hover:bg-blue-50 group-hover:text-blue-700 transition-colors">
+                <div className="mt-5">
+                  <span className={`
+                    inline-block px-3 py-1.5 text-xs font-semibold rounded-full transition-all duration-300
+                    ${office.isHQ 
+                      ? 'bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white' 
+                      : 'bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-700'
+                    }
+                  `}>
                     {office.type}
                   </span>
                 </div>
 
-                <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+                <p className="mt-4 text-sm text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors duration-300">
                   {office.description}
                 </p>
+
+                {/* Decorative corner accent */}
+                <div className={`
+                  absolute bottom-0 right-0 w-16 h-16 rounded-tl-3xl transition-all duration-500
+                  ${office.isHQ 
+                    ? 'bg-gradient-to-tl from-blue-100/50 to-transparent group-hover:from-blue-200/70' 
+                    : 'bg-gradient-to-tl from-slate-100/50 to-transparent group-hover:from-blue-100/50'
+                  }
+                `} />
               </article>
-            ))}
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Animation indicator */}
+      <Container>
+        <div className="mt-8 flex items-center justify-center gap-2 text-sm text-slate-400">
+          <div className="flex gap-1">
+            <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+            <span className="w-2 h-2 rounded-full bg-blue-300 animate-bounce" style={{ animationDelay: '150ms' }} />
+            <span className="w-2 h-2 rounded-full bg-blue-200 animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
-
-          {/* Mobile: Horizontal scroll with snap */}
-          <div className="md:hidden -mx-4 px-4">
-            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide">
-              {t.offices.map((office, index) => (
-                <article
-                  key={office.city}
-                  className={`
-                    shrink-0 w-[280px] snap-center bg-white rounded-2xl border p-5 transition-all duration-300
-                    ${office.isHQ ? 'border-blue-200 ring-1 ring-blue-100' : 'border-slate-200'}
-                  `}
-                >
-                  {office.isHQ && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 mb-3 bg-blue-700 text-white text-xs font-semibold rounded-full">
-                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" clipRule="evenodd" />
-                      </svg>
-                      HQ
-                    </span>
-                  )}
-
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className={`
-                      w-10 h-10 rounded-lg flex items-center justify-center
-                      ${office.isHQ ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'}
-                    `}>
-                      {getIcon(index, office.isHQ)}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-900">{office.city}</h3>
-                      <p className="text-xs text-slate-500">{office.country}</p>
-                    </div>
-                  </div>
-
-                  <span className="inline-block px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-medium rounded mb-2">
-                    {office.type}
-                  </span>
-
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    {office.description}
-                  </p>
-                </article>
-              ))}
-            </div>
-            {/* Scroll indicator */}
-            <div className="flex justify-center gap-1.5 mt-4">
-              {t.offices.map((_, i) => (
-                <div key={i} className="w-2 h-2 rounded-full bg-slate-300 hover:bg-blue-400 transition-colors" />
-              ))}
-            </div>
-          </div>
+          <span className="ml-2">Автоматическая прокрутка</span>
         </div>
       </Container>
+
+      {/* CSS for animation */}
+      <style jsx>{`
+        @keyframes carousel {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(calc(-100% / 3));
+          }
+        }
+        
+        .animate-carousel {
+          animation: carousel 30s linear infinite;
+        }
+        
+        .animate-carousel:hover {
+          animation-play-state: paused;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+          .animate-carousel {
+            animation: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }
