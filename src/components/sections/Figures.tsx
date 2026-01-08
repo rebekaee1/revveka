@@ -169,11 +169,11 @@ export function Figures({ dictionary }: FiguresProps) {
           </div>
 
           {/* Ownership Structure */}
-          <div>
+          <div className="lg:pt-8">
             <h3 className="text-2xl font-semibold text-slate-900 mb-2">
               {ownership.title}
             </h3>
-            <p className="text-slate-600 mb-8">
+            <p className="text-slate-600 mb-6">
               {ownership.subtitle}
             </p>
 
@@ -182,7 +182,7 @@ export function Figures({ dictionary }: FiguresProps) {
               <div className="shrink-0 group">
                 <svg
                   viewBox="0 0 100 100"
-                  className="w-40 h-40 sm:w-48 sm:h-48 transform group-hover:scale-105 transition-transform duration-300"
+                  className="w-40 h-40 sm:w-44 sm:h-44 transform group-hover:scale-105 transition-transform duration-300"
                   role="img"
                   aria-label={ownership.title}
                 >
@@ -214,33 +214,57 @@ export function Figures({ dictionary }: FiguresProps) {
               </div>
 
               {/* Legend */}
-              <div className="flex-1 space-y-4">
+              <div className="flex-1 space-y-2">
                 {segments.map((owner, index) => (
                   <div
                     key={owner.name}
-                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors cursor-default group"
+                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-colors cursor-default group"
                     style={{ animationDelay: `${0.3 + index * 0.1}s` }}
                   >
                     <div
-                      className="shrink-0 w-4 h-4 rounded-full group-hover:scale-125 transition-transform"
+                      className="shrink-0 w-3.5 h-3.5 rounded-full group-hover:scale-125 transition-transform"
                       style={{ backgroundColor: owner.color }}
                       aria-hidden="true"
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline justify-between gap-2">
-                        <span className="font-semibold text-slate-900 truncate">
+                        <span className="font-semibold text-slate-900 truncate text-sm">
                           {owner.name}
                         </span>
-                        <span className="shrink-0 text-lg font-bold text-slate-900">
+                        <span className="shrink-0 text-base font-bold text-slate-900">
                           {owner.percentage}%
                         </span>
                       </div>
-                      <p className="text-sm text-slate-500">{owner.role}</p>
+                      <p className="text-xs text-slate-500">{owner.role}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Leadership - Chief Risk & Security Officer - Full width */}
+        <div className="mt-12 p-6 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+          {/* Decorative shield icon */}
+          <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-5 group-hover:opacity-10 transition-opacity">
+            <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+            </svg>
+          </div>
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="shrink-0 w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center">
+              <svg className="w-7 h-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-bold text-xl">{t.leadership.name}</h4>
+              <p className="text-blue-300 font-medium">{t.leadership.title}</p>
+            </div>
+            <p className="text-slate-400 text-sm max-w-md leading-relaxed sm:text-right">
+              {t.leadership.description}
+            </p>
           </div>
         </div>
       </Container>

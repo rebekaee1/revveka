@@ -146,6 +146,11 @@ export const dictionaries = {
     figures: {
       sectionLabel: 'Ключевые показатели',
       title: 'REVVEKA в цифрах',
+      leadership: {
+        name: 'Tim Revveka',
+        title: 'Директор по рискам и безопасности',
+        description: 'Отвечает за защиту транзакций, управление рисками и обеспечение конфиденциальности данных клиентов',
+      },
       stats: [
         { value: '>35', label: 'Сотрудников' },
         { value: 'CHF 3.2M', label: 'Оборот 2024' },
@@ -434,6 +439,11 @@ export const dictionaries = {
     figures: {
       sectionLabel: 'Key Figures',
       title: 'REVVEKA in Numbers',
+      leadership: {
+        name: 'Tim Revveka',
+        title: 'Chief Risk & Security Officer',
+        description: 'Responsible for transaction protection, risk management and client data confidentiality',
+      },
       stats: [
         { value: '>35', label: 'Employees' },
         { value: 'CHF 3.2M', label: 'Turnover 2024' },
@@ -647,6 +657,11 @@ export interface Dictionary {
   figures: {
     sectionLabel: string;
     title: string;
+    leadership: {
+      name: string;
+      title: string;
+      description: string;
+    };
     stats: Array<{
       value: string;
       label: string;

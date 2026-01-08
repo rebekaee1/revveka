@@ -169,11 +169,14 @@ export function Locations({ dictionary }: LocationsProps) {
         }
         
         .animate-carousel {
-          animation: carousel 30s linear infinite;
+          animation: carousel 22s linear infinite;
         }
         
-        .animate-carousel:hover {
-          animation-play-state: paused;
+        /* Остановка только на десктопе при hover (не на тачскринах) */
+        @media (hover: hover) and (pointer: fine) {
+          .animate-carousel:hover {
+            animation-play-state: paused;
+          }
         }
         
         @media (prefers-reduced-motion: reduce) {
