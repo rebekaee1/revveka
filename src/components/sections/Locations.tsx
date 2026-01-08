@@ -172,6 +172,13 @@ export function Locations({ dictionary }: LocationsProps) {
           animation: carousel 22s linear infinite;
         }
         
+        /* Ускоренная карусель на мобильных (30% быстрее) */
+        @media (max-width: 768px) {
+          .animate-carousel {
+            animation: carousel 15s linear infinite;
+          }
+        }
+        
         /* Остановка только на десктопе при hover (не на тачскринах) */
         @media (hover: hover) and (pointer: fine) {
           .animate-carousel:hover {
