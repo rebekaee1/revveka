@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import type { Dictionary } from '@/data/dictionaries';
@@ -13,6 +13,10 @@ interface FiguresProps {
 function AnimatedNumber({ value, duration = 2000 }: { value: string; duration?: number }) {
   const [displayValue, setDisplayValue] = useState('0');
   
+  const updateDisplay = useCallback((newValue: string) => {
+    setDisplayValue(newValue);
+  }, []);
+  
   useEffect(() => {
     // Check if value starts with > or has letters
     const hasPrefix = value.startsWith('>');
@@ -22,11 +26,13 @@ function AnimatedNumber({ value, duration = 2000 }: { value: string; duration?: 
     const numericValue = parseFloat(cleanValue);
     
     if (isNaN(numericValue)) {
-      setDisplayValue(value);
+      updateDisplay(value);
       return;
     }
     
     const startTime = Date.now();
+    let animationId: number;
+    
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
@@ -36,24 +42,29 @@ function AnimatedNumber({ value, duration = 2000 }: { value: string; duration?: 
       const current = numericValue * easeOut;
       
       if (Number.isInteger(numericValue)) {
-        setDisplayValue(`${prefix}${Math.floor(current)}${suffix}`);
+        updateDisplay(`${prefix}${Math.floor(current)}${suffix}`);
       } else {
-        setDisplayValue(`${prefix}${current.toFixed(1)}${suffix}`);
+        updateDisplay(`${prefix}${current.toFixed(1)}${suffix}`);
       }
       
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
       } else {
-        setDisplayValue(value);
+        updateDisplay(value);
       }
     };
     
     const timer = setTimeout(() => {
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
     }, 300);
     
-    return () => clearTimeout(timer);
-  }, [value, duration]);
+    return () => {
+      clearTimeout(timer);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [value, duration, updateDisplay]);
   
   return <>{displayValue}</>;
 }
@@ -62,20 +73,22 @@ export function Figures({ dictionary }: FiguresProps) {
   const t = dictionary.figures;
   const ownership = dictionary.ownership;
 
-  // Calculate donut chart segments
-  const owners = ownership.owners;
-  let cumulativePercentage = 0;
-  const segments = owners.map((owner, index) => {
-    const startAngle = (cumulativePercentage / 100) * 360;
-    cumulativePercentage += owner.percentage;
-    const endAngle = (cumulativePercentage / 100) * 360;
-    return {
-      ...owner,
-      startAngle,
-      endAngle,
-      color: index === 0 ? '#1e40af' : index === 1 ? '#3b82f6' : '#93c5fd',
-    };
-  });
+  // Calculate donut chart segments using useMemo
+  const segments = useMemo(() => {
+    const owners = ownership.owners;
+    let cumulative = 0;
+    return owners.map((owner, index) => {
+      const startAngle = (cumulative / 100) * 360;
+      cumulative += owner.percentage;
+      const endAngle = (cumulative / 100) * 360;
+      return {
+        ...owner,
+        startAngle,
+        endAngle,
+        color: index === 0 ? '#1e40af' : index === 1 ? '#3b82f6' : '#93c5fd',
+      };
+    });
+  }, [ownership.owners]);
 
   // Create SVG arc path
   const createArc = (startAngle: number, endAngle: number, radius: number, innerRadius: number) => {

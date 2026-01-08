@@ -30,7 +30,10 @@ export function Header({ dictionary, locale }: HeaderProps) {
 
   // Close menu on route change
   useEffect(() => {
-    setIsMenuOpen(false);
+    // Use microtask to avoid synchronous setState warning
+    queueMicrotask(() => {
+      setIsMenuOpen(false);
+    });
   }, [pathname]);
 
   const navLinks = [
